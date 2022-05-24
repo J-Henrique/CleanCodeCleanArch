@@ -24,7 +24,7 @@ export default class PlaceOrder {
         await this.orderRepository.save(order);
         const total = order.getTotal();
         return {
-            code: order.orderCode.value,
+            code: order.code.value,
             total
         }
     }

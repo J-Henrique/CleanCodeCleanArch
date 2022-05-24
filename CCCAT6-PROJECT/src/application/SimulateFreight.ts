@@ -1,4 +1,4 @@
-import Freight from "../domain/entity/Freight";
+import FreightCalculator from "../domain/entity/Freight";
 import ItemRepository from "../domain/repository/ItemRepository";
 
 export default class SimulateFreight {
@@ -7,7 +7,7 @@ export default class SimulateFreight {
     }
 
     async execute(input: Input): Promise<Output> {
-        const freight = new Freight();
+        const freight = new FreightCalculator();
         for (const orderItem of input.orderItems) {
             const item = await this.itemRepository.get(orderItem.idItem);
             freight.addItem(item, orderItem.quantity);

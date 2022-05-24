@@ -5,14 +5,17 @@ import PlaceOrder from "../../src/application/PlaceOrder";
 import OrderRepositoryMemory from "../../src/infra/repository/memory/OrderRepositoryMemory";
 import CouponRepositoryMemory from "../../src/infra/repository/memory/CouponRepositoryMemory";
 import Coupon from "../../src/domain/entity/Coupon";
+import OrderRepositoryDatabase from "../../src/infra/repository/database/OrderRepositoryDatabase";
+import PgPromiseConnectionAdapter from "../../src/infra/database/PgPromiseConnectionAdapter";
 
 test("Deve fazer um pedido", async function() {
     const itemRepository = new ItemRepositoryMemory();
-    const orderRepository = new OrderRepositoryMemory();
-    const couponRepository = new CouponRepositoryMemory()
     itemRepository.save(new Item(1, "Guitarra", 1000, new Dimension(100, 30, 10), 3));
 	itemRepository.save(new Item(2, "Amplificador", 5000, new Dimension(50, 50, 50), 20));
 	itemRepository.save(new Item(3, "Cabo", 30, new Dimension(10, 10, 10), 1));
+    const connection = new PgPromiseConnectionAdapter();
+    const orderRepository = new OrderRepositoryDatabase(connection);
+    const couponRepository = new CouponRepositoryMemory()
     const placeOrder = new PlaceOrder(itemRepository, orderRepository, couponRepository);
     const input = {
         cpf: "935.411.347-80",
@@ -25,6 +28,7 @@ test("Deve fazer um pedido", async function() {
     };
     const output = await placeOrder.execute(input);
     expect(output.total).toBe(6350);
+    await connection.close();
 });
 
 test("Deve fazer um pedido e gerar o código do pedido", async function() {

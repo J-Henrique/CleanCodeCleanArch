@@ -1,6 +1,6 @@
 import Item from "./Item";
 
-export default class Freight {
+export default class FreightCalculator {
 	private total = 0;
 	private DISTANCE = 1000;
 	private FACTOR = 100;
