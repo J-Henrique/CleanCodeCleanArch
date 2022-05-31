@@ -64,3 +64,9 @@ test("Deve gerar um pedido com código", function() {
     const order = new Order("935.411.347-80", new Date("2022-01-01T12:00:00"), 1);
     expect(order.code.value).toBe("202200000001");
 });
+
+test("Deve lançar uma expection se o item for adicionado mais de uma vez", function() {
+    const order = new Order("935.411.347-80");
+    order.addItem(new Item(1, "Item 1", 1000), 1);
+    expect(() => order.addItem(new Item(1, "Item 1", 1000), 1)).toThrow(new Error("Duplicated item"));
+});

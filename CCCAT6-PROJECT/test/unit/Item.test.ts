@@ -24,3 +24,7 @@ test("Deve retornar a densidade igual a 0 quando não tiver peso e dimensão", f
     const density = item.getDensity();
     expect(density).toBe(0)
 });
+
+test("Deve lançar uma exception se o peso for negativo", function() {
+    expect(() => new Item(1, "Guitarra", 1000, new Dimension(100, 30, 10), -3)).toThrow(new Error("Invalid weight"));
+});

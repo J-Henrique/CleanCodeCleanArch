@@ -1,9 +1,7 @@
 export default class OrderItem {
     
     constructor(readonly itemId: number, readonly price: number, readonly quantity: number) {
-        this.itemId = itemId;
-        this.price = price;
-        this.quantity = quantity;
+        if (quantity < 0) throw new Error("Invalid quantity");
     }
 
     getTotal() {
