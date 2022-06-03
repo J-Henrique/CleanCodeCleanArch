@@ -25,4 +25,8 @@ export default class OrderRepositoryMemory implements OrderRepository {
         // return order;
         throw Error();
     }
+    
+    async clear(): Promise<void> {
+        this.orders = [];
+    }
 }

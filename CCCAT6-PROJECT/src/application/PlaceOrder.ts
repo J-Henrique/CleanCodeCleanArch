@@ -1,13 +1,18 @@
 import ItemRepository from "../domain/repository/ItemRepository";
 import Order from "../domain/entity/Order";
 import OrderRepository from "../domain/repository/OrderRepository";
-import OrderCode from "../domain/entity/OrderCode";
-import Coupon from "../domain/entity/Coupon";
 import CouponRepository from "../domain/repository/CouponRepository";
+import RepositoryFactory from "../domain/factory/RepositoryFactory";
 
 export default class PlaceOrder {
+    itemRepository: ItemRepository;
+    orderRepository: OrderRepository;
+    couponRepository: CouponRepository;
 
-    constructor(readonly itemRepository: ItemRepository, readonly orderRepository: OrderRepository, readonly couponRepository: CouponRepository) {
+    constructor(readonly repositoryFactory: RepositoryFactory) {
+        this.itemRepository = repositoryFactory.createItemRepository();
+        this.orderRepository = repositoryFactory.createOrderRepository();
+        this.couponRepository = repositoryFactory.createCouponRepository();
     } 
 
     async execute(input: Input): Promise<Output> {

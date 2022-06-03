@@ -8,24 +8,23 @@ import Coupon from "../../src/domain/entity/Coupon";
 import OrderRepositoryDatabase from "../../src/infra/repository/database/OrderRepositoryDatabase";
 import PgPromiseConnectionAdapter from "../../src/infra/database/PgPromiseConnectionAdapter";
 import Connection from "../../src/infra/database/Connection";
+import OrderRepository from "../../src/domain/repository/OrderRepository";
+import RepositoryFactory from "../../src/domain/factory/RepositoryFactory";
+import DatabaseRepositoryFactory from "../../src/infra/factory/DatabaseRepositoryFactory";
 
 let connection: Connection;
-let orderRepository: OrderRepositoryDatabase;
-let couponRepository: CouponRepositoryMemory;
+let orderRepository: OrderRepository;
+let repositoryFactory: RepositoryFactory;
 
 beforeEach(async function() {
     connection = new PgPromiseConnectionAdapter();
-    orderRepository = new OrderRepositoryDatabase(connection);
-    couponRepository = new CouponRepositoryMemory();
-    await orderRepository.clear();
-})
+    repositoryFactory = new DatabaseRepositoryFactory(connection);
+    orderRepository = repositoryFactory.createOrderRepository();
+    await orderRepository.clear(); 
+});
 
 test("Deve fazer um pedido", async function() {
-    const itemRepository = new ItemRepositoryMemory();
-    itemRepository.save(new Item(1, "Guitarra", 1000, new Dimension(100, 30, 10), 3));
-	itemRepository.save(new Item(2, "Amplificador", 5000, new Dimension(50, 50, 50), 20));
-	itemRepository.save(new Item(3, "Cabo", 30, new Dimension(10, 10, 10), 1));
-    const placeOrder = new PlaceOrder(itemRepository, orderRepository, couponRepository);
+    const placeOrder = new PlaceOrder(repositoryFactory);
     const input = {
         cpf: "935.411.347-80",
         orderItems: [
@@ -40,11 +39,7 @@ test("Deve fazer um pedido", async function() {
 });
 
 test("Deve fazer um pedido e gerar o código do pedido", async function() {
-    const itemRepository = new ItemRepositoryMemory();
-    itemRepository.save(new Item(1, "Guitarra", 1000, new Dimension(100, 30, 10), 3));
-	itemRepository.save(new Item(2, "Amplificador", 5000, new Dimension(50, 50, 50), 20));
-	itemRepository.save(new Item(3, "Cabo", 30, new Dimension(10, 10, 10), 1));
-    const placeOrder = new PlaceOrder(itemRepository, orderRepository, couponRepository);
+    const placeOrder = new PlaceOrder(repositoryFactory);
     const input = {
         cpf: "935.411.347-80",
         orderItems: [
@@ -58,13 +53,8 @@ test("Deve fazer um pedido e gerar o código do pedido", async function() {
     expect(output.code).toBe("202100000001" );
 });
 
-test("Deve fazer um pedido com desconto", async function() {
-    const itemRepository = new ItemRepositoryMemory();
-    itemRepository.save(new Item(1, "Guitarra", 1000, new Dimension(100, 30, 10), 3));
-	itemRepository.save(new Item(2, "Amplificador", 5000, new Dimension(50, 50, 50), 20));
-	itemRepository.save(new Item(3, "Cabo", 30, new Dimension(10, 10, 10), 1));
-    couponRepository.save(new Coupon("VALE20", 20, new Date("2021-03-10T10:00:00")));
-    const placeOrder = new PlaceOrder(itemRepository, orderRepository, couponRepository);
+test("Deve fazer um pedido com desconto", async function() { 
+    const placeOrder = new PlaceOrder(repositoryFactory);
     const input = {
         cpf: "935.411.347-80",
         orderItems: [
