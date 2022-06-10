@@ -1,4 +1,4 @@
-import Http from "../Http";
+import Http from "./Http";
 import Hapi from "@hapi/hapi";
 
 export default class HapiAdapter implements Http {

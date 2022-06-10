@@ -1,4 +1,4 @@
-import Http from "../Http";
+import Http from "./Http";
 import express from "express";
 
 export default class ExpressAdapter implements Http {
