@@ -1,6 +1,6 @@
-import AirportTicketCalculator from "./strategy/AirportTicketCalculator";
-import BeachTicketCalculator from "./strategy/BeachTicketCalculator";
-import ShoppingTicketCalculator from "./strategy/ShoppingTicketCalculator";
+import AirportTicketCalculator from "./AirportTicketCalculator";
+import BeachTicketCalculator from "./BeachTicketCalculator";
+import ShoppingTicketCalculator from "./ShoppingTicketCalculator";
 
 export default class TicketCalculatorFactory {
 

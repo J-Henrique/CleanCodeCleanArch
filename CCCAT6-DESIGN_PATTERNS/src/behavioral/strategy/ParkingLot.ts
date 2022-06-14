@@ -1,4 +1,4 @@
-import TicketCalculatorFactory from "../TicketCalculatorFactory";
+import TicketCalculatorFactory from "./TicketCalculatorFactory";
 import Period from "./Period";
 import TickerCalculator from "./TickerCalculator";
 
