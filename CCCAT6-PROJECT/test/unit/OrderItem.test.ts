@@ -5,6 +5,6 @@ test("Deve criar um item de pedido", function () {
 	expect(orderItem.getTotal()).toBe(2000);
 });
 
-test.only("Deve lançar uma exception se a quantidade de um item for negativa", function () {
+test("Deve lançar uma exception se a quantidade for negativa", function () {
 	expect(() => new OrderItem(1, 1000, -2)).toThrow(new Error("Invalid quantity"));
 });
